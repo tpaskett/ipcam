@@ -1,0 +1,12 @@
+[
+{
+	"name":"Upstairs",
+	"stream_url":"rtsp://admin:@172.16.50.107/live0.264",
+	"id":"upstair"
+},
+{
+	"name":"3D Printer",
+	"stream_url":"rtsp://admin:@172.16.50.143/live0.264",
+	"id":"3d"
+}
+]

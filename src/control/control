@@ -1,0 +1,10 @@
+Package: ipcam
+Version: 0.1
+Depends: apache2, libjson-perl, libx264-142, ffmpeg
+Provides: 
+Source: package/ipcam
+Section: net
+Priority: optional
+Maintainer: Trevor Paskett (K7FPV)
+Architecture: all
+Description: Web IP camera interface to RTSP cameras

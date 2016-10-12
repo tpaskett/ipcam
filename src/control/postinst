@@ -1,0 +1,17 @@
+#!/bin/sh
+
+a2enmod cgi > /dev/null 2>&1
+service apache2 restart > /dev/null 2>&1
+
+update-rc.d ipcamd defaults 99 > /dev/null 2>&1
+
+APACHE_USER=$(ps aux | egrep '(apache|httpd)' | grep -v root | head -n 1 | awk '{print $1}')
+
+chown -R $APACHE_USER:$APACHE_USER /var/www/html/ipcam
+chown $APACHE_USER:$APACHE_USER /usr/lib/cgi-bin/ipcam
+
+ln -s /var/www/html/ipcam /var/www/ipcam 2> /dev/null
+
+/etc/init.d/ipcamd start > /dev/null 2>&1
+
+exit 0

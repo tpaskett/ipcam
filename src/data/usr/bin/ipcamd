@@ -1,0 +1,63 @@
+#!/usr/bin/perl
+
+use JSON;
+use Data::Dumper;
+
+$SIG{TERM} = sub{ kill_ffmpeg(); exit(1) };
+
+`mkdir -p /tmp/ipcam`;
+`ln -s /tmp/ipcam /var/www/html/ipcam/video`;
+
+kill_ffmpeg();
+
+while (1) {
+    check_cameras();
+    sleep(5);
+}
+
+sub kill_ffmpeg {
+    my @ps = `ps ax | grep ffmpeg | grep ipcam | grep -v grep`;
+
+    foreach my $line (@ps) {
+        if ($line =~ /^(\d+)\s/) {
+            `kill $1`;
+        }
+    }
+}
+
+sub check_cameras {
+    open(JSON, "/var/www/html/ipcam/cameras.json");
+    my $file;
+    while(<JSON>) {
+    	$file .= $_;
+    }
+    close(JSON);
+
+    print "$file\n";
+
+    my $json;
+
+    eval {
+        $json = decode_json($file);
+        1;
+    } or do {
+        print "decode_json error\n";
+        return;
+    };
+
+    print Dumper $json;
+
+    my $ps = `ps ax | grep ffmpeg | grep -v grep`;
+
+    print "$ps\n";
+
+    foreach my $camera (@{$json}) {
+	   print "$$camera{id}\n";
+    	if ($ps !~ "$$camera{id}.m3u8") {
+	       print "$$camera{id} NOT running\n";
+	        `ffmpeg -v info -i $$camera{stream_url} -c:v copy -c:a copy -bufsize 1835k -pix_fmt yuv420p -flags -global_header -hls_time 5 -hls_list_size 3 -hls_wrap 3 -start_number 1 /var/www/html/ipcam/video/$$camera{id}.m3u8 > /dev/null 2>&1 &`;
+    	} else {
+	       print "$$camera{id} IS running\n";
+    	}
+    }
+}

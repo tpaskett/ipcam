@@ -1,0 +1,8 @@
+#!/bin/sh
+
+mkdir -p /var/www/html/ipcam
+mkdir -p /var/www/html/ipcam/fonts
+
+/etc/init.d/ipcamd stop > /dev/null 2> /dev/null
+
+exit 0

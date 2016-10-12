@@ -1,0 +1,64 @@
+#!/usr/bin/perl
+
+#BEGIN { push @INC, '/www/cgi-bin', '/usr/lib/cgi-bin' }
+BEGIN { push @INC, '/opt/local/lib/perl5/site_perl/5.8.9/' }
+use JSON;
+use Data::Dumper;
+
+$| = 1;
+
+my %query;
+
+parse_params();
+
+if ( $query{action} eq 'cameras' ) {
+    cameras();
+}
+else {
+    error('error no action');
+}
+
+sub parse_params {
+    my $post_data;
+    my $json;
+
+    if ( length( $ENV{'QUERY_STRING'} ) > 0 ) {
+        print STDERR "QS: " . $ENV{'QUERY_STRING'} . "\n";
+        $post_data = $ENV{'QUERY_STRING'};
+    }
+    else {
+        foreach my $data (<STDIN>) {
+            print STDERR "$post_data\n";
+            $post_data .= $data;
+        }
+    }
+
+    if ( length($post_data) > 0 ) {
+        print STDERR $post_data;
+        $buffer = $post_data;
+        @pairs = split( /&/, $buffer );
+        foreach $pair (@pairs) {
+            ( $name, $value ) = split( /=/, $pair );
+            $value =~ s/%([a-fA-F0-9][a-fA-F0-9])/pack("C", hex($1))/eg;
+            $value =~ s/\+/ /g;
+            $query{$name} = $value;
+        }
+    }    
+}
+
+sub error {
+    my $msg = shift;
+
+    print "Content-type:text\r\n\r\n";
+    print $msg;
+}
+
+sub cameras {
+    print "Content-type:application/json\r\n\r\n";
+
+    open(JSON, "/var/www/html/ipcam/cameras.json");
+    while(<JSON>) {
+        print $_;
+    }
+    close(JSON);
+}

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="video-js-cdn.css" rel="stylesheet">
+        <script src="video.js"></script>
+        <script src="videojs-contrib-hls.js"></script>
+        <link rel="stylesheet" href="bootstrap.min.css"/>
+        <link rel="stylesheet" href="bootstrap-theme.min.css"/>
+        <link rel="stylesheet" href="style.css"/>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">
+                        IP Cam
+                    </a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li class="active">
+                            <a href="#">
+                                View Cam
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#about">
+                                Cameras
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#contact">
+                                Setup
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.nav-collapse -->
+            </div>
+        </nav>
+        <div id="row-div" class="row">
+            <div id="video-div" class="col-sm-9 video-div">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <video id="my_video_1" class="video-js vjs-default-skin vjs-16-9" controls preload="auto" width="1280" height="720" data-setup='{"fluid": true}'>
+                        <!-- <source src="http://10.197.0.18/test.m3u8" type="application/x-mpegURL"> -->
+                    </video>
+                    </div>
+                    <div class="progress">
+                        <div id="video-progress" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:0%">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <table class="camera-table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    Camera
+                                </th>
+                                <th>
+                                </th>                                
+                            </tr>
+                        </thead>
+                        <tbody id="cameras-table">
+                        </tbody>
+                    </table>
+                </div>
+                <div id="map-div" class="col-sm-6 map-div">
+                    <img id="map" class="img-responsive"/>
+                </div>
+            </div>
+            <script src="jquery-2.2.0.min.js">
+            </script>
+            <script src="bootstrap.min.js">
+            </script>
+            <script src="loading-overlay.min.js">
+            </script>
+            <script src="ipcam.js">
+            </script>
+        </body>
+    </html>
